@@ -1,6 +1,15 @@
-let menubtn = document.querySelector('#menu-btn');
-let navbar = document.querySelector('.header .flex .navbar');
+const menubtn = document.querySelector('#menu-btn');
+const navbar = document.querySelector('.header .flex .navbar');
 
+const navigationHeight=  navbar.offsetHeight;
+document.documentElement.style.setProperty(
+  "--scroll-padding",
+  navigationHeight + "6rem"
+)
+
+
+
+  
 menubtn.onclick = () =>{
     menubtn.classList.toggle('fa-times');
     navbar.classList.toggle('active');
@@ -86,3 +95,4 @@ var swiper = new Swiper(".course-slider", {
         },
       },
   });
+
