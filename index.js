@@ -96,3 +96,39 @@ var swiper = new Swiper(".course-slider", {
       },
   });
 
+
+  // BACKEND...
+
+  document.getElementById('data').addEventListener('submit', function (e) {
+    e.preventDefault(); // Prevent the default form submission
+
+    // Collect form data...
+    const formData = {
+      name: this.querySelector('input[name="name"]').value,
+      email: this.querySelector('input[name="email"]').value,
+      number: this.querySelector('input[name="number"]').value,
+      courses: this.querySelector('select[name="courses"]').value,
+      gender: this.querySelector('input[name="gender"]:checked').value,
+    };
+
+    // Send form data as JSON to the server...
+    fetch('http://localhost:3000/submit', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        alert('Massege Send Succesfully!')
+    // clear from after submit..
+     this.reset();
+
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  });
+

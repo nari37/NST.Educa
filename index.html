@@ -399,13 +399,13 @@
         <div class="image">
         <img src="ASSETS/contact 2.png" alt="">
         </div>
-       <form action="" method="post">
+       <form id='data'action="/submit" method="post">
         <span>your name</span>
         <input type="text" placeholder="enter your full name" class="box" name="name">
         <span>your email</span>
         <input type="email" placeholder="enter your email" class="box" name="email">
         <span>your number</span>
-        <input type="number" placeholder="enter your valid number" min ="0" max="99999" class="box" name="number" onkeypress="if(this.value.length == 10) return false;">
+        <input type="number" placeholder="enter your valid number" min ="0" max="9999999999" class="box" name="number" onkeypress="if(this.value.length == 10) return false;">
         <span>select course</span>
         <select name="courses" class="box">
             <option value="" id="se">select course--</option>
