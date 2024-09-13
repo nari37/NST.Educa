@@ -56,6 +56,10 @@ app.post('/register', (req, res) => {
     });
 });
 
+app.get("/",(req,res)=>{
+res.send("server is running")
+})
+
 
 const port = 3000;
 app.listen(port, () => {
