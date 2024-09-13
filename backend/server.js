@@ -2,43 +2,60 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const mysql = require('mysql');
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+
+dotenv.config();
 app.use(cors());
-// Create a MySQL connection
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'online_education'
-});
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// Connect to MySQL
-db.connect((err) => {
-  if (err) throw err;
-  console.log('Connected to MySQL database');
-});
-
-// Middleware to parse JSON data
-app.use(bodyParser.json());
-
-//  POST request...
-app.post('/submit', (req, res) => {
-//   const { name, email, number, courses, gender } = req.body;
-  const mydata = [req.body.name,req.body.email,req.body.number,req.body.courses,req.body.gender]
-  // Insert the data into the MySQL database..
-  const sql = 'INSERT INTO users (name, email, number, courses, gender) VALUES (?)';
-
-  
-  db.query(sql, [mydata], (err, result) => {
-    if (err) {
-      console.log('MySQL Error:', err);
-     
-    } else {
-      console.log('Data inserted successfully');
-      res.json({ message: 'Data inserted successfully' });
-    }
+mongoose
+  .connect(process.env.MONGO)
+  .then(() => {
+    console.log('Connected to MongoDB!...');
+  })
+  .catch((err) => {
+    console.log(err);
   });
+
+const userSchema = new mongoose.Schema({
+  name: String,
+  email: String,
+  phone: Number,
 });
+
+const userModel = mongoose.model('students', userSchema);
+app.post('/register', (req, res) => {
+  console.log("Received registration data:", req.body);
+  const { email, phone } = req.body;
+
+  // Check if a user with the same email or phone already exists
+  userModel.findOne({ $or: [{ email }, { phone }] })
+    .then((existingStudent) => {
+      if (existingStudent) {
+        // If a student with the same email or phone is found, send an error message
+        return res.status(400).json({ message: 'You are already registered.' });
+      } else {
+        // If no student is found, create a new student
+        userModel.create(req.body)
+          .then((student) =>
+            res
+              .status(200)
+              .json({ message: 'You are registered successfully.', student })
+          )
+          .catch((err) => {
+            console.error(err);
+            res.status(500).json({ error: 'Internal Server Error' });
+          });
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).json({ error: 'Internal Server Error' });
+    });
+});
+
 
 const port = 3000;
 app.listen(port, () => {
