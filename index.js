@@ -11,7 +11,7 @@ document.getElementById('data').addEventListener('submit', function (e) {
   };
 
   // Send form data as JSON to the server
-  fetch('http://localhost:3000/register', {
+  fetch("https://nst-backend.onrender.com/register", {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
