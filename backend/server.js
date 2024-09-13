@@ -6,8 +6,14 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
 dotenv.config();
-app.use(cors());
+const corsOptions = {
+  origin: 'https://nst-educa.onrender.com', // Replace with your frontend domain
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type'],
+};
+app.use(cors(corsOptions));
 app.use(express.json());
+
 app.use(express.urlencoded({ extended: true }));
 
 mongoose
